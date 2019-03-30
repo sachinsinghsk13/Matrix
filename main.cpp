@@ -3,10 +3,10 @@
 using namespace std;
 
 
-
 int main(int argc, char *argv[])
 {
-    Matrix m(10, 10, Matrix::IDENTITY);
+    SquareMatrixOrder order(10);
+    Matrix m(order, 110);
     m.print();
     return 0;
 }
