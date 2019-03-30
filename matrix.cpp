@@ -2,40 +2,49 @@
 #include "matrix.h"
 using namespace std;
 
+MatrixOrder::MatrixOrder() : ROWS(1), COLUMNS(1) {}
+MatrixOrder::MatrixOrder(int row, int col) : ROWS((row > 0) ? row : throw invalid_argument("row value must be positive and not zero")),
+                                             COLUMNS((col > 0) ? col : throw invalid_argument("column value must be positive and not zero")) {}
+MatrixOrder::MatrixOrder(int square_size) : ROWS((square_size > 0 ? square_size : throw invalid_argument("square matrix size must be postive and not zero"))), COLUMNS(ROWS) {}
 
-Matrix::Matrix(int row, int col, Type type) : ROW(row), COL(col)
+Matrix::Matrix(MatrixOrder matrix_order, MatrixType matrix_type, int scalar_value)
 {
-    if (row > 0 && col > 0)
+    // Allocate memory for matrix
+    matrix = new int *[matrix_order.ROWS];
+    for (int i = 0; i < matrix_order.ROWS; i++)
     {
-        matrix = new int *[ROW];
-        for (int i = 0; i < ROW; i++)
-        {
-            *(matrix + i) = new int[COL];
-        }
-        /* Make an Empty matrix*/
-        if (type == Type::EMPTY)
-        {
-            for (int i = 0; i < ROW; i++)
-            {
-                for (int j = 0; j < COL; j++)
-                {
-                    *(*(matrix + i) + j) = 0;
-                }
-            }
-        } else if (type == Type::IDENTITY) {
-            for (int i = 0; i < ROW; i++)
-            {
-                for (int j = 0; j < COL; j++)
-                {
-                    *(*(matrix + i) + j) = (i == j)?1:0;
-                }
-            }
-        }
+        *(matrix + i) = new int[matrix_order.ROWS];
     }
-    else
+
+    // Initialize Matrix
+    switch (matrix_type)
     {
-        cout << "Negetive Row or Column" << endl;
-        delete this;
+    case IDENTITY:
+        for (int i = 0; i < matrix_order.ROWS; i++)
+        {
+            for (int j = 0; j < matrix_order.COLUMNS; j++)
+            {
+                *(*(matrix + i) + j) = (i == j) ? 1 : 0;
+            }
+        }
+        break;
+    case SCALAR:
+        for (int i = 0; i < matrix_order.ROWS; i++)
+        {
+            for (int j = 0; j < matrix_order.COLUMNS; j++)
+            {
+                *(*(matrix + i) + j) = (i == j) ? scalar_value : 0;
+            }
+        }
+        break;
+    default:
+        for (int i = 0; i < matrix_order.ROWS; i++)
+        {
+            for (int j = 0; j < matrix_order.COLUMNS; j++)
+            {
+                *(*(matrix + i) + j) = 0;
+            }
+        }
     }
 }
 
