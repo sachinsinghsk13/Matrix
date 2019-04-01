@@ -12,7 +12,9 @@ public:
   const int ROWS;
   const int COLUMNS;
   MatrixOrder();
+  MatrixOrder(const MatrixOrder& mo);
   MatrixOrder(int row, int col);
+  friend bool operator==(const MatrixOrder& order1, const MatrixOrder& order2);
 };
 
 class SquareMatrixOrder : public MatrixOrder {
@@ -30,11 +32,16 @@ public:
   const MatrixOrder ORDER;
   void set_value(int row, int col, int value);
   int get_value(int row, int col);
-  Matrix operator+(const Matrix &other);
-  Matrix operator-(const Matrix &other);
-  Matrix operator*(const Matrix &other);
+  friend Matrix operator+(Matrix &matrix1, Matrix& matrix2 );
+  Matrix& operator-(const Matrix &other);
+  Matrix& operator*(const Matrix &other);
 
   void print();
 };
+bool operator==(const MatrixOrder& order1, const MatrixOrder& order2);
+Matrix operator+(Matrix &matrix1, Matrix& matrix2);
+Matrix operator-(Matrix &matrix1, Matrix& matrix2);
+Matrix operator*(Matrix &matrix1, Matrix& matrix2);
+Matrix operator*(int value, Matrix& matrix2);
 
 #endif
